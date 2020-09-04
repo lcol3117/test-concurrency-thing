@@ -1,1 +1,18 @@
+need Person:
+  :speech => String?
+  :name => String
 
+process Person:
+  Self:
+    old
+    |> update
+      :speech
+      "Hello " ++ mailbox(:name)
+  Send:
+    match mailbox:
+      :get_name -> :name => self(:name)
+ 
+ alice = Person(:name => "alice")
+ bob = Person(:name => "bob", :speech => "i like chess")
+ 
+bob ! :get_name -> alice
